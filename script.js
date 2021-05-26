@@ -1,12 +1,13 @@
-const socket = io('http://localhost:3000')
+console.log("hola");
+const socket = io()
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
-
-const name = prompt('What is your name?')
+console.log("hi");
+const nam = prompt('What is your name?')
 appendMessage('You joined')
-socket.emit('new-user', name)
-
+socket.emit('new-user', nam);
+console.log("hello");
 socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`)
 })
