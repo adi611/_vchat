@@ -1,33 +1,4 @@
-// 'use strict';
 
-// const express = require("express");
-// const socketIO = require('socket.io')
-
-
-// const PORT = process.env.PORT || 3000;
-// const INDEX = '/index.html';
-
-// const server = express()
-//   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-//   .listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-// const io = socketIO(server);
-
-// const users = {}
-
-// io.on('connection', socket => {
-//   socket.on('new-user', name => {
-//     users[socket.id] = name
-//     socket.broadcast.emit('user-connected', name)
-//   })
-//   socket.on('send-chat-message', message => {
-//     socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
-//   })
-//   socket.on('disconnect', () => {
-//     socket.broadcast.emit('user-disconnected', users[socket.id])
-//     delete users[socket.id]
-//   })
-// })
 
 var PORT = process.env.PORT || 3000;
 var app = require('express')();
@@ -41,16 +12,18 @@ app.get('/', function(req, res) {
 const users = {}
 
 io.sockets.on('connection', socket => {
-  socket.on('new-user', name => {
-    users[socket.id] = name
-    socket.broadcast.emit('user-connected', name)
+  socket.on('new-user', req => {
+    users[socket.id] = req
+    socket.join(users[socket.id].room);
+    socket.to(users[socket.id].room).emit('user-connected', users[socket.id].name)
   })
   socket.on('send-chat-message', message => {
-    socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+    socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
   })
   socket.on('disconnect', () => {
-    socket.broadcast.emit('user-disconnected', users[socket.id])
+    socket.to(users[socket.id].room).emit('user-disconnected', users[socket.id].name)
     delete users[socket.id]
+    socket.leave(users[socket.id].room);
   })
 });
 http.listen(PORT, function() {

@@ -18,7 +18,7 @@
     #message-container {
       width: 80%;
       max-width: 1200px;
-      height:80vh;
+      height:70vh;
       overflow-y: scroll;
     }
 
@@ -47,23 +47,24 @@
   </style>
 </head>
 <body>
-  <div id="message-container"></div>
+  <div id="message-container" class="container-fluid"></div>
   <form id="send-container">
     <input type="text" id="message-input">
-    <button type="submit" id="send-button">Send</button>
+    <button type="submit" id="send-button" class="btn-dark">Send</button>
   </form>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-  console.log("hola");
+
 const socket = io()
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
-console.log("hi");
+
 const name = prompt('What is your name?')
 appendMessage('You joined')
-socket.emit('new-user', name);
-console.log("hello");
+const room = prompt("Enter room:")
+socket.emit('new-user', {name,room});
+
 socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`)
 })
