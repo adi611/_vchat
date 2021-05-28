@@ -68,8 +68,9 @@ const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
 
 const name = prompt('What is your name?')
-appendMessage('You joined', 1)
 const room = prompt("Enter room:")
+
+appendMessage('You joined', 1)
 socket.emit('new-user', {name,room});
 
 socket.on('chat-message', data => {

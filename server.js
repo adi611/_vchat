@@ -23,8 +23,11 @@ io.sockets.on('connection', socket => {
     socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
   })
   socket.on('disconnect', () => {
-    socket.leave(users[socket.id].room);
-    socket.to(users[socket.id].room).emit('user-disconnected', users[socket.id].name)
+    if(users[socket.id]!=undefined){
+      socket.leave(users[socket.id].room);
+      socket.to(users[socket.id].room).emit('user-disconnected', users[socket.id].name)
+    }
+    
     
     delete users[socket.id]
   })
