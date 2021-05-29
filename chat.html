@@ -32,7 +32,7 @@
       max-width: 1200px;
       width: 80%;
       margin: auto;
-      margin-top: 10vh;
+      margin-top: 6vh;
     }
 
     .head{
@@ -42,14 +42,12 @@
       margin-bottom: 20px;
     }
  
-    /* body{
-      background-image: linear-gradient(45deg,#151515,#301b3f);
-    } */
   </style>
 </head>
 <body>
   <div class="row">
-    <div class="head col-sm-12"><h4>vchat</h4></div>
+    <div class="head col-sm-12 container-fluid"><h4>vchat</h4></div>
+    <div id="users" class="col-sm-12"></div>
     <div id="message-container" class="container-fluid col-sm-12"></div>
     
   </div>
@@ -64,6 +62,7 @@
   <script>
 
 const socket = io()
+const userElement = document.getElementById("users");
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
@@ -71,8 +70,9 @@ const messageInput = document.getElementById('message-input')
 const name = prompt('What is your name?')
 const room = prompt("Enter room:")
 
-appendMessage('You joined', 1)
+
 socket.emit('new-user', {name,room});
+appendMessage('You joined', 1)
 
 socket.on('chat-message', data => {
   appendMessage(`${data.name}: ${data.message}`,0)
@@ -85,6 +85,18 @@ socket.on('user-connected', name => {
 socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`,0)
 })
+
+socket.on("current-users",users=>{
+  userElement.innerHTML = "Current users in room are:\t";
+  for(var key in users){
+    appendUser(users[key].name);
+  }
+})
+
+function appendUser(name){
+  userElement.innerHTML+=name+",\t";
+  userElement.style.textAlign = "center";
+}
 
 messageForm.addEventListener('submit', e => {
   e.preventDefault()
