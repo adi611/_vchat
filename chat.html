@@ -15,6 +15,8 @@
       height:70vh;
       overflow-y: scroll;
       border-bottom: 0.2px solid gray;
+      display:flex;
+      flex-direction: column;
     }
 
     #message-container div {
@@ -22,9 +24,9 @@
       padding: 5px;
     }
 
-    #message-container div:nth-child(2n) {
-      background-color: #FFF;
-    }
+    /* #message-container div:nth-child(2n) {
+      background-color: rgb(230, 227, 227);
+    } */
 
     #send-container {
       bottom: 0;
@@ -39,7 +41,10 @@
       text-align: center;
       background-color: rgb(68, 67, 67);
       color: #FFF;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+    #users{
+      margin-bottom: 10px;
     }
  
   </style>
@@ -108,10 +113,14 @@ messageForm.addEventListener('submit', e => {
 
 function appendMessage(message,n) {
   const messageElement = document.createElement('div')
+  messageElement.style.marginBottom = "10px";
   messageElement.style.borderRadius = "10px";
+  messageElement.style.width = "fit-content";
+  messageElement.style.maxWidth = "65vw";
+  messageElement.style.position = "relative"
   messageElement.innerText = message
   if(n===1){
-    messageElement.style.textAlign = "right";
+    messageElement.style.backgroundColor = "rgb(230, 227, 227)";
   }
 
   messageContainer.append(messageElement)

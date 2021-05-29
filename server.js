@@ -21,7 +21,6 @@ io.on('connection', socket => {
     io.in(users[socket.id].room).emit("current-users",users);
     socket.join(users[socket.id].room);
     socket.to(users[socket.id].room).emit('user-connected', users[socket.id].name)
-    console.log(users);
     
   })
   socket.on('send-chat-message', message => {
