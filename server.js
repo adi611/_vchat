@@ -10,7 +10,9 @@ app.use(express.static(__dirname));
 app.get('/', function(req, res) {
    res.sendFile(__dirname+'/index.html');
 });
-
+app.post('/', function(req, res) {
+  res.sendFile(__dirname+'/chat.html');
+});
 const users = {}
 
 io.sockets.on('connection', socket => {

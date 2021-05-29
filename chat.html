@@ -14,7 +14,7 @@
       max-width: 1200px;
       height:70vh;
       overflow-y: scroll;
-      border: 1px solid;
+      border-bottom: 0.2px solid gray;
     }
 
     #message-container div {
@@ -32,18 +32,19 @@
       max-width: 1200px;
       width: 80%;
       margin: auto;
+      margin-top: 10vh;
     }
 
-    #message-input {
-      flex-grow: 1;
-    }
     .head{
       text-align: center;
-      display: block;
+      background-color: rgb(68, 67, 67);
+      color: #FFF;
+      margin-bottom: 20px;
     }
-    .form{
-      margin-top: 60px;
-    }
+ 
+    /* body{
+      background-image: linear-gradient(45deg,#151515,#301b3f);
+    } */
   </style>
 </head>
 <body>
@@ -95,6 +96,7 @@ messageForm.addEventListener('submit', e => {
 
 function appendMessage(message,n) {
   const messageElement = document.createElement('div')
+  messageElement.style.borderRadius = "10px";
   messageElement.innerText = message
   if(n===1){
     messageElement.style.textAlign = "right";
