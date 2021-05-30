@@ -46,6 +46,14 @@
     #users{
       margin-bottom: 10px;
     }
+    .message-element{
+      word-wrap : break-word;
+      margin-bottom : 10px;
+      border-radius : 10px;
+      width : fit-content;
+      max-width : 65vw;
+      position : relative;
+    }
  
   </style>
 </head>
@@ -113,11 +121,8 @@ messageForm.addEventListener('submit', e => {
 
 function appendMessage(message,n) {
   const messageElement = document.createElement('div')
-  messageElement.style.marginBottom = "10px";
-  messageElement.style.borderRadius = "10px";
-  messageElement.style.width = "fit-content";
-  messageElement.style.maxWidth = "65vw";
-  messageElement.style.position = "relative"
+  messageElement.classList.add("message-element");
+  
   messageElement.innerText = message
   if(n===1){
     messageElement.style.alignSelf = "flex-end"
