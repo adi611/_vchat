@@ -120,6 +120,7 @@ function appendMessage(message,n) {
   messageElement.style.position = "relative"
   messageElement.innerText = message
   if(n===1){
+    messageElement.style.alignSelf = "flex-end"
     messageElement.style.backgroundColor = "rgb(230, 227, 227)";
   }
 
