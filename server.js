@@ -20,14 +20,17 @@ io.on('connection', socket => {
     users[socket.id] = req
     
     socket.join(users[socket.id].room);
+    if(typeof(users[socket.id])!=undefined)
     io.sockets.in(users[socket.id].room).emit("current-users",users,users[socket.id].room);
     socket.to(users[socket.id].room).emit('user-connected', users[socket.id].name)
     
   })
   socket.on('send-chat-message', message => {
+    if(typeof(users[socket.id])!=undefined)
     socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
   })
   socket.on("user-typing",()=>{
+    if(typeof(users[socket.id])!=undefined)
     socket.to(users[socket.id].room).emit("show-typing");
   })
   socket.on("show-users",()=>{
