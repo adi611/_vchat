@@ -66,7 +66,7 @@
   </div>
   <div class="col-sm-12 form">
     <form id="send-container" class="input-group mb-3">
-      <input type="text" id="message-input" class="form-control">
+      <input type="text" id="message-input" class="form-control" oninput="printTyping()">
       <button type="submit" id="send-button" class="btn btn-dark">Send</button>
     </form>
   </div>
@@ -79,6 +79,9 @@ const userElement = document.getElementById("users");
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
+
+let typingTimer;                //timer identifier
+let doneTypingInterval = 1000;  //time in ms (2 seconds)
 
 const name = prompt('What is your name?')
 const room = prompt("Enter room:")
@@ -99,9 +102,10 @@ socket.on('user-disconnected', name => {
   appendMessage(`${name} disconnected`,0)
 })
 
-socket.on("current-users",users=>{
+socket.on("current-users",(users,room)=>{
   userElement.innerHTML = "Current users in room are:\t";
   for(var key in users){
+    if(users[key].room === room)
     appendUser(users[key].name);
   }
 })
@@ -112,19 +116,23 @@ function appendUser(name){
 }
 
 messageForm.addEventListener('submit', e => {
+  //prevents page from reloading every time submit is clicked
   e.preventDefault()
   const message = messageInput.value
   appendMessage(`You: ${message}`,1)
   socket.emit('send-chat-message', message)
+  //the input field is set to blank after user send a message
   messageInput.value = ''
 })
 
 function appendMessage(message,n) {
   const messageElement = document.createElement('div')
+  //add class to add styles
   messageElement.classList.add("message-element");
   
   messageElement.innerText = message
   if(n===1){
+    //aligns our sent message to our side, i.e., right
     messageElement.style.alignSelf = "flex-end"
     messageElement.style.backgroundColor = "rgb(230, 227, 227)";
   }
@@ -133,6 +141,36 @@ function appendMessage(message,n) {
   // below statement scrolls down the div when a new message is added
   messageContainer.scrollTop = messageContainer.scrollHeight;
 }
+
+function printTyping(){
+  socket.emit("user-typing");
+}
+socket.on("show-typing",()=>{
+  showTyping();
+})
+function showTyping(){
+  userElement.innerHTML = "typing...";
+}
+messageInput.addEventListener('keyup', () => {
+    clearTimeout(typingTimer);
+    if (messageInput.value) {
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    }
+});
+
+//user is "finished typing," do something
+function doneTyping () {
+    //do something
+    socket.emit("show-users");
+}
+// function changeTyping(){
+//   setTimeout(function(){
+//     socket.emit("show-users");
+//   },500);
+// }
+
+
+
   </script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>

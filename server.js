@@ -18,24 +18,30 @@ const users = {}
 io.on('connection', socket => {
   socket.on('new-user', req => {
     users[socket.id] = req
-    io.in(users[socket.id].room).emit("current-users",users);
+    
     socket.join(users[socket.id].room);
+    io.sockets.in(users[socket.id].room).emit("current-users",users,users[socket.id].room);
     socket.to(users[socket.id].room).emit('user-connected', users[socket.id].name)
     
   })
   socket.on('send-chat-message', message => {
-    io.in(users[socket.id].room).emit("current-users",users);
     socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
   })
+  socket.on("user-typing",()=>{
+    socket.to(users[socket.id].room).emit("show-typing");
+  })
+  socket.on("show-users",()=>{
+    io.sockets.in(users[socket.id].room).emit("current-users",users,users[socket.id].room);
+  })
+
   socket.on('disconnect', () => {
     if(users[socket.id]!=undefined){
       const room = users[socket.id].room;
       socket.leave(room);
       socket.to(room).emit('user-disconnected', users[socket.id].name)
       delete users[socket.id]
-      socket.to(room).emit("current-users",users);
+      socket.to(room).emit("current-users",users,room);
     }
-    
     
     
    
