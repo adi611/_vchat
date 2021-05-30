@@ -31,6 +31,7 @@ io.on('connection', socket => {
     socket.to(users[socket.id].room).emit("show-typing");
   })
   socket.on("show-users",()=>{
+    if(typeof(users[socket.id])!=undefined)
     io.sockets.in(users[socket.id].room).emit("current-users",users,users[socket.id].room);
   })
 
