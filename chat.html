@@ -119,10 +119,15 @@ messageForm.addEventListener('submit', e => {
   //prevents page from reloading every time submit is clicked
   e.preventDefault()
   const message = messageInput.value
-  appendMessage(`You: ${message}`,1)
-  socket.emit('send-chat-message', message)
-  //the input field is set to blank after user send a message
-  messageInput.value = ''
+  if(message!=""){
+    appendMessage(`You: ${message}`,1)
+    socket.emit('send-chat-message', message)
+    //the input field is set to blank after user send a message
+    messageInput.value = ''
+  }
+  else{
+    alert("Enter text!");
+  }
 })
 
 function appendMessage(message,n) {
@@ -153,9 +158,10 @@ function showTyping(){
 }
 messageInput.addEventListener('keyup', () => {
     clearTimeout(typingTimer);
-    if (messageInput.value) {
-        typingTimer = setTimeout(doneTyping, doneTypingInterval);
-    }
+    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    // if (messageInput.value) {
+    //     typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    // }
 });
 
 //user is "finished typing," do something
