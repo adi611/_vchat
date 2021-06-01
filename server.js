@@ -29,7 +29,10 @@ io.on('connection', socket => {
   })
   socket.on('send-chat-message', message => {
     if(typeof(users[socket.id])!="undefined")
-    socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
+    {
+      socket.to(users[socket.id].room).emit('chat-message', { message: message, name: users[socket.id].name })
+      io.sockets.in(users[socket.id].room).emit("current-users",users,users[socket.id].room);
+    }
   })
   socket.on("user-typing",()=>{
     if(typeof(users[socket.id])!="undefined")
