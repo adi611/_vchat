@@ -1,0 +1,40 @@
+#message-container {
+    width: 90%;
+    max-width: 1200px;
+    height:70vh;
+    overflow-y: scroll;
+    border-bottom: 0.2px solid gray;
+    display:flex;
+    flex-direction: column;
+}
+
+#message-container div {
+  background-color: #CCC;
+  padding: 10px;
+}
+
+#send-container {
+  bottom: 0;
+  background-color: white;
+  max-width: 1200px;
+  width: 80%;
+  margin: auto;
+  margin-top: 6vh;
+}
+.head{
+  text-align: center;
+  background-color: rgb(68, 67, 67);
+  color: #FFF;
+  margin-bottom: 10px;
+}
+#users{
+  margin-bottom: 10px;
+}
+.message-element{
+  word-wrap : break-word;
+  margin-bottom : 10px;
+  border-radius : 20px;
+  width : fit-content;
+  max-width : 65vw;
+  position : relative;
+}
